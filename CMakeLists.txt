@@ -17,6 +17,7 @@ find_package(fmt CONFIG REQUIRED)
 add_executable(${PROJECT_NAME}
 src/main.cpp
 src/config.cpp
+src/logger.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE fmt)

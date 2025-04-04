@@ -1,12 +1,12 @@
 #ifndef CONFIG_HPP
+#define CONFIG_HPP
 
 #include<fmt/printf.h>
 #include<fmt/color.h>
-
 #include<toml++/toml.hpp>
 #include<sys/stat.h>
-
 #include<memory.h>
+#include<logger.hpp>
 
 
 class Config {
@@ -32,6 +32,4 @@ inline std::optional<T> Config::retrieve(std::string section, std::string token)
     return value;
 }
 
-
-#define CONFIG_HPP
 #endif

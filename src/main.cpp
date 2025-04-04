@@ -2,6 +2,7 @@
 #include <filesystem>
 #include<memory.h>
 #include<string.h>
+#include <logger.hpp>
 
 int main() {
     const char *homedir;
