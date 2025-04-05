@@ -17,3 +17,31 @@ void Logger::log(const std::string &str) {
 void Logger::info(const std::string &str) {
     Logger::print(fg(fmt::color::light_blue), str);
 }
+
+std::function<void(const dpp::log_t &)> Logger::initBotLogging()
+{
+    return [](const dpp::log_t& event) {
+        switch (event.severity)
+        {
+        case dpp::ll_trace:
+            break;
+        
+        case dpp::ll_debug:
+            Logger::log(event.message);
+            break;
+
+        case dpp::ll_info:
+            Logger::info(event.message);
+            break;
+
+        case dpp::ll_warning:
+            Logger::log(event.message);
+            break;
+
+        case dpp::ll_critical:
+        case dpp::ll_error:
+            Logger::error(event.message);
+            break;
+        }
+    };
+}

@@ -5,6 +5,8 @@
 #include<fmt/chrono.h>
 #include<fmt/printf.h>
 #include <fmt/core.h>
+#include<functional>
+#include<dpp/dpp.h>
 
 
 class Logger {
@@ -15,6 +17,8 @@ class Logger {
         static void error(const std::string& str);
         static void log(const std::string& str);
         static void info(const std::string &str);
+
+        static std::function<void(const dpp::log_t&)> initBotLogging();
 };
 
 #endif

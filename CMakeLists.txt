@@ -29,6 +29,8 @@ add_executable(${PROJECT_NAME}
 src/main.cpp
 src/config.cpp
 src/logger.cpp
+src/commandhandler.cpp
+src/commands/ping.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE dpp fmt)

@@ -4,6 +4,8 @@
 #include<string.h>
 #include <logger.hpp>
 #include <dpp/dpp.h>
+#include<commandhandler.hpp>
+#include<commands/ping.hpp>
 
 std::filesystem::path getConfigPath() {
     const char *homedir;
@@ -18,7 +20,15 @@ std::filesystem::path getConfigPath() {
     return configPath;
 }
 
+void initCommands(Commandhandler& cmdHandler) {
+    cmdHandler.addCommand(new PingCommand());
+}
+
 int main() {
+    Commandhandler cmdHandler;
+
+    initCommands(cmdHandler);
+
     std::filesystem::path configPath = getConfigPath();
 
     std::unique_ptr<Config> cfg = Config::parse(configPath);
@@ -34,40 +44,20 @@ int main() {
 
     dpp::cluster bot(token.value());
 
-    bot.on_log([](const dpp::log_t& event) {
-        switch (event.severity)
-        {
-        case dpp::ll_trace:
-        case dpp::ll_debug:
-            Logger::log(event.message);
-            break;
-
-        case dpp::ll_info:
-            Logger::info(event.message);
-            break;
-
-        case dpp::ll_warning:
-            Logger::log(event.message);
-            break;
-
-        case dpp::ll_critical:
-        case dpp::ll_error:
-            Logger::error(event.message);
-            break;
-        }
-    });
+    bot.on_log(Logger::initBotLogging());
  
-    bot.on_slashcommand([](const dpp::slashcommand_t& event) {
-        if (event.command.get_command_name() == "ping") {
-            event.reply("Pong!");
-        }
+    bot.on_slashcommand([cmdHandler](const dpp::slashcommand_t& event) {
+        cmdHandler.handleEvent(event);
     });
  
     bot.on_ready([&bot](const dpp::ready_t& event) {
         if (dpp::run_once<struct register_bot_commands>()) {
-            bot.global_command_create(dpp::slashcommand("ping", "Ping pong!", bot.me.id));
+            Logger::log("Registering commands...");
+            // bot.global_command_create(dpp::slashcommand("ping", "Ping pong!", bot.me.id));
         }
     });
+
+    Logger::log("Starting bot...");
 
     bot.start(dpp::st_wait);
 
