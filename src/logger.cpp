@@ -1,21 +1,21 @@
 #include<logger.hpp>
 
-void Logger::print(const fmt::text_style& style, const std::string& str) {
+void Logger::print(const fmt::text_style& style, const std::string& domain, const std::string& str) {
     auto timestamp = std::chrono::system_clock::now();
 
-    fmt::print(style, "[{:%Y-%m-%d %H:%M:%S}] {}\n", timestamp, str);
+    fmt::print(style, "[{:%Y-%m-%d %H:%M:%S}] {}\n{}\n\n", timestamp, domain, str);
 }
 
-void Logger::error(const std::string& str) {
-    Logger::print(fg(fmt::color::red), str);
+void Logger::error(const std::string& domain, const std::string& str) {
+    Logger::print(fg(fmt::color::red), domain, str);
 }
 
-void Logger::log(const std::string &str) {
-    Logger::print(fg(fmt::color::light_gray), str);
+void Logger::log(const std::string& domain, const std::string &str) {
+    Logger::print(fg(fmt::color::light_gray), domain, str);
 }
 
-void Logger::info(const std::string &str) {
-    Logger::print(fg(fmt::color::light_blue), str);
+void Logger::info(const std::string& domain, const std::string &str) {
+    Logger::print(fg(fmt::color::light_blue), domain, str);
 }
 
 std::function<void(const dpp::log_t &)> Logger::initBotLogging()
@@ -27,20 +27,20 @@ std::function<void(const dpp::log_t &)> Logger::initBotLogging()
             break;
         
         case dpp::ll_debug:
-            Logger::log(event.message);
+            Logger::log("Bot", event.message);
             break;
 
         case dpp::ll_info:
-            Logger::info(event.message);
+            Logger::info("Bot", event.message);
             break;
 
         case dpp::ll_warning:
-            Logger::log(event.message);
+            Logger::log("Bot", event.message);
             break;
 
         case dpp::ll_critical:
         case dpp::ll_error:
-            Logger::error(event.message);
+            Logger::error("Bot", event.message);
             break;
         }
     };

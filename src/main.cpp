@@ -38,7 +38,7 @@ int main() {
     auto token = cfg->retrieve<std::string>("bot", "token");
 
     if(!token.has_value()) {
-        Logger::error("Bot token missing from config");
+        Logger::error("Main", "Bot token missing from config");
         return 2;
     }
 
@@ -52,12 +52,12 @@ int main() {
  
     bot.on_ready([&bot](const dpp::ready_t& event) {
         if (dpp::run_once<struct register_bot_commands>()) {
-            Logger::log("Registering commands...");
+            Logger::log("Main", "Registering commands...");
             // bot.global_command_create(dpp::slashcommand("ping", "Ping pong!", bot.me.id));
         }
     });
 
-    Logger::log("Starting bot...");
+    Logger::log("Main", "Starting bot...");
 
     bot.start(dpp::st_wait);
 

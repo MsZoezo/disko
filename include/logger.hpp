@@ -11,12 +11,12 @@
 
 class Logger {
     private:
-        static void print(const fmt::text_style& ts, const std::string& str);
+        static void print(const fmt::text_style& ts, const std::string& domain, const std::string& str);
 
     public:
-        static void error(const std::string& str);
-        static void log(const std::string& str);
-        static void info(const std::string &str);
+        static void error(const std::string& domain, const std::string& str);
+        static void log(const std::string& domain, const std::string& str);
+        static void info(const std::string& domain, const std::string& str);
 
         static std::function<void(const dpp::log_t&)> initBotLogging();
 };
